@@ -1,0 +1,43 @@
+name: ubuntu_flavor_installer
+description: Ubuntu Flavor Installer
+publish_to: 'none'
+
+environment:
+  sdk: ">=2.19.0 <3.0.0"
+  flutter: ">=3.7.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_html: 3.0.0-alpha.6
+  ubuntu_desktop_installer:
+    git:
+      url: https://github.com/canonical/ubuntu-desktop-installer
+      ref: e958e429441a22fff8cb6b3fbf80532d01396d9b
+      path: packages/ubuntu_desktop_installer
+  url_launcher: ^6.1.8
+  yaru: ^0.5.0
+
+dependency_overrides:
+  subiquity_client:
+    path: packages/subiquity_client
+
+dev_dependencies:
+  flutter_lints: ^2.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  generate: true
+  uses-material-design: true
+  assets:
+    - assets/
+    - assets/choose_your_look/
+    - assets/install_alongside/
+    - assets/installation_complete/
+    - assets/installation_slides/
+    - assets/installation_slides/icons/
+    - assets/installation_slides/screenshots/
+    - assets/select_guided_storage/
+    - assets/try_or_install/
+    - assets/welcome/

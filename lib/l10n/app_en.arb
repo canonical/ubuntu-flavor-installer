@@ -1,0 +1,8 @@
+{
+  "firstSlideTitle": "First slide",
+  "firstSlideBody": "Welcome to\nUbuntu FLAVOR",
+  "secondSlideTitle": "Second slide",
+  "secondSlideBody": "Almost done. Please wait...",
+  "thirdSlideTitle": "Third slide",
+  "thirdSlideBody": "Learn more at <a href=\"https://ubuntu.com\">ubuntu.com</a>"
+}
