@@ -3,6 +3,10 @@
 [Ubuntu Desktop Installer](https://github.com/canonical/ubuntu-desktop-installer)
 starting point for Ubuntu flavors.
 
+| Light | Dark |
+|---|---|
+| ![Light](screenshots/light.png) | ![Dark](screenshots/dark.png) |
+
 ## Getting started
 
 1. Init submodules:
