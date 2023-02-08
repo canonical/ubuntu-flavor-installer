@@ -13,6 +13,10 @@ void main(List<String> args) {
       darkTheme: yaruMagentaDark,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
     ),
-    slides: flavorSlides,
+    slides: [
+      firstSlide,
+      secondSlide,
+      thirdSlide,
+    ],
   );
 }

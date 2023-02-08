@@ -1,65 +1,54 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:ubuntu_desktop_installer/installer.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-String _slideAsset(String name) => 'assets/installation_slides/$name.png';
+import 'l10n.dart';
 
-final flavorSlides = <Slide>[
-  _firstSlide,
-  _secondSlide,
-  _thirdSlide,
-];
-
-extension on BuildContext {
-  AppLocalizations get l10n => AppLocalizations.of(this);
-}
-
-final _firstSlide = Slide(
+final firstSlide = Slide(
   title: (context) => Text(context.l10n.firstSlideTitle),
   body: (context) => Stack(
     children: [
-      Image.asset(_slideAsset('welcome')),
+      Image.asset('assets/installation_slides/welcome.png'),
       Positioned.directional(
         textDirection: Directionality.of(context),
         top: 120,
         start: 120,
         child: Text(
           context.l10n.firstSlideBody,
-          style: Theme.of(context)
-              .textTheme
-              .displaySmall
-              ?.copyWith(color: Colors.white),
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 48,
+          ),
         ),
       ),
     ],
   ),
 );
 
-final _secondSlide = Slide(
+final secondSlide = Slide(
   title: (context) => Text(context.l10n.secondSlideTitle),
-  body: (context) => DecoratedBox(
-    decoration: BoxDecoration(
-      image: DecorationImage(image: AssetImage(_slideAsset('background'))),
-    ),
-    child: Center(
-      child: Text(
-        context.l10n.secondSlideBody,
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: FontSize.xxLarge.value,
+  body: (context) => Stack(
+    children: [
+      Image.asset('assets/installation_slides/background.png'),
+      Center(
+        child: Text(
+          context.l10n.secondSlideBody,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 24,
+          ),
         ),
       ),
-    ),
+    ],
   ),
 );
 
-final _thirdSlide = Slide(
+final thirdSlide = Slide(
   title: (context) => Text(context.l10n.thirdSlideTitle),
   body: (context) => Stack(
     children: [
-      Image.asset(_slideAsset('background')),
+      Image.asset('assets/installation_slides/background.png'),
       Center(
         child: Html(
           shrinkWrap: true,
@@ -67,7 +56,7 @@ final _thirdSlide = Slide(
           style: {
             'body': Style(
               color: Colors.white,
-              fontSize: FontSize.xxLarge,
+              fontSize: FontSize(24),
             ),
           },
           onAnchorTap: (url, _, __, ___) => launchUrlString(url!),
