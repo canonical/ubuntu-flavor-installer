@@ -4,8 +4,8 @@ import 'package:yaru/yaru.dart';
 
 import 'slides.dart';
 
-void main(List<String> args) {
-  runInstallerApp(
+Future<void> main(List<String> args) {
+  return runInstallerApp(
     args,
     flavor: FlavorData(
       name: 'Ubuntu FLAVOR',
