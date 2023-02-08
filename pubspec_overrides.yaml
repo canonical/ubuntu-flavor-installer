@@ -1,0 +1,3 @@
+dependency_overrides:
+  subiquity_client:
+    path: packages/subiquity_client
