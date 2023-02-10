@@ -1,0 +1,269 @@
+name: ubuntu-flavor-installer
+version: git
+summary: Ubuntu Flavor Installer
+description: |
+  This project is a modern implementation of the Ubuntu Flavor installer,
+  using subiquity as a backend and Flutter for the UI.
+grade: stable
+confinement: classic
+base: core20
+issues: https://bugs.launchpad.net/ubuntu-flavor-installer/+filebug
+contact: https://bugs.launchpad.net/ubuntu-flavor-installer/+filebug
+
+apps:
+  subiquity-server:
+    command: bin/subiquity-server
+    daemon: simple
+    restart-condition: always
+
+  subiquity-loadkeys:
+    command: bin/subiquity/bin/subiquity-loadkeys
+
+  ubuntu-flavor-installer:
+    command: bin/ubuntu_flavor_installer
+    command-chain: [bin/launcher]
+    desktop: bin/data/flutter_assets/assets/ubuntu-flavor-installer.desktop
+    environment:
+      PATH: $SNAP/usr/bin:$SNAP/bin:$PATH
+      LIBGL_DRIVERS_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri
+      GIO_MODULE_DIR: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gio/modules
+      LIVE_RUN: 1
+      LOG_LEVEL: debug
+      SNAP_PYTHON: python3
+
+  probert:
+    command: bin/probert
+
+  os-prober:
+    command: usr/bin/os-prober
+
+parts:
+  curtin:
+    override-pull: |
+      snapcraftctl pull
+      PACKAGED_VERSION="$(git describe --long --abbrev=9 --match=[0-9][0-9]*)"
+      sed -e "s,@@PACKAGED_VERSION@@,$PACKAGED_VERSION,g" -i curtin/version.py
+    plugin: python
+    source-type: git
+    source: https://git.launchpad.net/curtin
+    source-commit: b08eecd68cf5f1bccf4255b3d00a77af51c159f7
+    build-packages:
+      - shared-mime-info
+      - zlib1g-dev
+    python-packages:
+      - pyyaml==5.3.1
+      - oauthlib
+      - jsonschema
+      - pyrsistent
+      - wheel
+      - setuptools
+      - pip
+      - bson
+      - urwid
+      - requests
+      - requests-unixsocket
+    organize:
+      lib/python*/site-packages/usr/lib/curtin: usr/lib/
+    stage:
+      - '*'
+      - -lib/python*/site-packages/_yaml.*.so
+      - -lib/python*/site-packages/setuptools
+      - -lib/python*/site-packages/pip
+      - -lib/python*/site-packages/pkg_resources
+      - -lib/python*/site-packages/jsonschema
+      - -lib/python*/site-packages/wheel*
+      - -lib/python*/site-packages/probert
+      - -bin/activate*
+      - -bin/python3*
+      - -lib/python3.8/site-packages/__pycache__/six.cpython*
+      - -lib/python3.8/site-packages/pip-*.dist-info/RECORD
+      - -lib/python3.8/site-packages/wheel-*.dist-info/RECORD
+      - -lib/python3.8/site-packages/_distutils_hack
+
+  probert:
+    plugin: python
+    build-packages:
+      - python-setuptools
+      - build-essential
+      - libnl-3-dev
+      - libnl-genl-3-dev
+      - libnl-route-3-dev
+    source: https://github.com/canonical/probert.git
+    source-type: git
+    source-commit: 31778895be3002422e9e8758d42940f290dc70af
+    requirements: [requirements.txt]
+    stage:
+      - '*'
+      - -bin/python3*
+
+  subiquitydeps:
+    plugin: nil
+    stage-packages:
+      - cloud-init
+      - libsystemd0
+      - iso-codes
+      - jq
+      - lsb-release
+      - ssh-import-id
+      - ntfs-3g
+      - python3-aiohttp
+      - python3-bson
+      - python3-minimal
+      - python3.8-minimal
+      - libpython3-stdlib
+      - libpython3.8-stdlib
+      - libpython3.8-minimal
+      - python3-apport
+      - python3-requests-unixsocket
+      - python3-pyudev
+      - python3-systemd
+      - python3-urwid
+      - util-linux
+      # WSL specifics:
+      - language-selector-common
+      - locales
+    prime:
+      - -lib/systemd/system/*
+
+  flutter-git:
+    source: https://github.com/flutter/flutter.git
+    source-tag: 3.7.0
+    source-depth: 1
+    plugin: nil
+    override-build: |
+      mkdir -p $SNAPCRAFT_PART_INSTALL/usr/bin
+      mkdir -p $SNAPCRAFT_PART_INSTALL/usr/libexec
+      cp -r $SNAPCRAFT_PART_SRC $SNAPCRAFT_PART_INSTALL/usr/libexec/flutter
+      ln -s $SNAPCRAFT_PART_INSTALL/usr/libexec/flutter/bin/flutter $SNAPCRAFT_PART_INSTALL/usr/bin/flutter
+      $SNAPCRAFT_PART_INSTALL/usr/bin/flutter doctor
+    build-packages:
+      - clang
+      - cmake
+      - curl
+      - libgtk-3-dev
+      - ninja-build
+      - unzip
+      - xz-utils
+      - zip
+    override-prime: ''
+
+  ubuntu-flavor-installer:
+    after: [flutter-git]
+    source: .
+    source-type: git
+    plugin: nil
+    override-build: |
+      set -eux
+      mkdir -p $SNAPCRAFT_PART_INSTALL/bin/lib
+      cp snap/local/launcher $SNAPCRAFT_PART_INSTALL/bin/
+      cp snap/local/subiquity-server $SNAPCRAFT_PART_INSTALL/bin/
+      cp -r packages/subiquity_client/subiquity $SNAPCRAFT_PART_INSTALL/bin/
+      mkdir -p $SNAPCRAFT_PART_INSTALL/etc/subiquity
+      cp -r snap/local/postinst.d $SNAPCRAFT_PART_INSTALL/etc/subiquity
+      # https://github.com/canonical/ubuntu-flavor-installer/issues/1146
+      (cd packages/ubuntu_wizard && flutter pub get)
+      cd packages/ubuntu_flavor_installer
+      flutter pub get
+      flutter build linux --release -v
+      cp -r build/linux/*/release/bundle/* $SNAPCRAFT_PART_INSTALL/bin/
+
+  ubuntu-wsl-setup:
+    after: [flutter-git]
+    source: .
+    source-type: git
+    plugin: nil
+    override-build: |
+      set -eux
+      # ubuntu-flavor-install will install subiquity in bin/subiquity. It’s not a real build-dep ordering though.
+      mkdir -p $SNAPCRAFT_PART_INSTALL/bin
+      mkdir -p $SNAPCRAFT_PART_INSTALL/usr/libexec
+      cd packages/ubuntu_wsl_setup
+      flutter pub get
+      flutter build linux --release -v
+      cp -r build/linux/*/release/bundle/* $SNAPCRAFT_PART_INSTALL/usr/libexec
+      cp -p ubuntu-wsl-setup $SNAPCRAFT_PART_INSTALL/bin/
+      # Create the theme empty directories for bindmounting the common-themes snap
+      mkdir -p $SNAPCRAFT_PART_INSTALL/data-dir/icons $SNAPCRAFT_PART_INSTALL/data-dir/sounds $SNAPCRAFT_PART_INSTALL/data-dir/themes
+
+  libraries:
+    plugin: nil
+    stage-packages:
+      - libatk1.0-0
+      - libcairo-gobject2
+      - libcairo2
+      - libegl-mesa0
+      - libegl1
+      - libgl1
+      - libglib2.0-0
+      - libglib2.0-dev
+      - libgtk-3-0
+      - libpango-1.0-0
+      - libpangocairo-1.0-0
+      - libpng16-16
+      - libwayland-egl1
+      - libx11-6
+      - libdatrie1
+      - libdrm2
+      - libgbm1
+      - libglapi-mesa
+      - libgraphite2-3
+      - libxshmfence1
+      - libllvm12
+      - libpciaccess0
+      - libvulkan1
+      - shared-mime-info
+    prime:
+      - usr/lib/*/libEGL*.so.*
+      - usr/lib/*/libGL*.so.*
+      - usr/lib/*/libX*.so.*
+      - usr/lib/*/liba*.so.*
+      - usr/lib/*/libcairo*.so.*
+      - usr/lib/*/libe*.so.*
+      - usr/lib/*/libf*.so.*
+      - usr/lib/*/libg*.so.*
+      - usr/lib/*/libharfbuzz*.so.*
+      - usr/lib/*/libpango*.so.*
+      - usr/lib/*/libpixman*.so.*
+      - usr/lib/*/libpng*.so.*
+      - usr/lib/*/libthai*.so.*
+      - usr/lib/*/libwayland*.so.*
+      - usr/lib/*/libxcb*.so.*
+      - usr/lib/*/libxkb*.so.*
+      - usr/lib/*/libdatrie*.so.*
+      - usr/lib/*/libdrm*.so.*
+      - usr/lib/*/libgbm*.so.*
+      - usr/lib/*/libglapi*.so.*
+      - usr/lib/*/libgraphite2*.so.*
+      - usr/lib/*/libxshmfence*.so.*
+      - usr/lib/*/libLLVM-12.so.*
+      - usr/lib/*/libpciaccess*.so.*
+      - usr/lib/*/libsensors*.so.*
+      - usr/lib/*/libvulkan*.so.*
+      - usr/share/glvnd/egl_vendor.d
+      - usr/lib/*/gdk-pixbuf-2.0
+      - usr/lib/*/
+      - usr/bin/update-mime-database
+      - usr/bin/gdk*
+      - usr/share/mime
+
+  dri-no-patchelf:
+    after: [libraries]
+    plugin: nil
+    stage-packages:
+      - libgl1-mesa-dri
+    build-attributes:
+      - no-patchelf # Otherwise snapcraft may strip the build ID and cause the driver to crash
+    stage:
+      - usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri
+      - usr/share/drirc.d
+
+  os-prober:
+    plugin: nil
+    stage-packages: [os-prober]
+    override-stage: |
+      snapcraftctl stage
+      for file in $(grep -lr /usr | grep 'usr/[^/]*/[^/]*-probe[sr]'); do
+        sed -i 's, \(/usr\), $SNAP\1,' $file
+      done
+      sed -i 's/mkdir "$tmpmnt"/mkdir -p "$tmpmnt"/' \
+          usr/lib/os-probes/50mounted-tests
