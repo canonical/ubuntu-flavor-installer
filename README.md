@@ -14,14 +14,9 @@ starting point for Ubuntu flavors.
     git submodule update --init --recursive
     ```
 
-2. Install curtin and probert:
+2. Install Subiquity's dependencies:
     ```sh
-    make -C packages/subiquity_client/subiquity gitdeps
-    ```
-
-3. Install subiquity dependencies:
-    ```sh
-    sudo packages/subiquity_client/subiquity/scripts/installdeps.sh
+    make -C packages/subiquity_client/subiquity install_deps
     ```
 
 3. [Install Flutter](https://docs.flutter.dev/get-started/install/linux)
