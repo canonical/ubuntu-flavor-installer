@@ -13,7 +13,7 @@ dependencies:
   ubuntu_desktop_installer:
     git:
       url: https://github.com/canonical/ubuntu-desktop-installer
-      ref: e958e429441a22fff8cb6b3fbf80532d01396d9b
+      ref: 05e3654441e5616bc8c1e1f67abd39aa80a02e4b
       path: packages/ubuntu_desktop_installer
   url_launcher: ^6.1.8
   yaru: ^0.5.0
