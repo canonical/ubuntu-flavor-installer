@@ -20,7 +20,7 @@ apps:
     command: bin/subiquity/bin/subiquity-loadkeys
 
   ubuntu-flavor-installer:
-    command: bin/ubuntu_flavor_installer
+    command: bin/ubuntu-flavor-installer
     command-chain: [bin/launcher]
     desktop: bin/data/flutter_assets/assets/ubuntu-flavor-installer.desktop
     environment:
