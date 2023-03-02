@@ -1,3 +1,13 @@
 dependency_overrides:
   subiquity_client:
     path: packages/subiquity_client
+  ubuntu_desktop_installer:
+    git:
+      url: https://github.com/canonical/ubuntu-desktop-installer
+      ref: 4240284b258779531aca374b9b61fc06e6e0d588
+      path: packages/ubuntu_desktop_installer
+  ubuntu_wizard:
+    git:
+      url: https://github.com/canonical/ubuntu-desktop-installer
+      ref: 4240284b258779531aca374b9b61fc06e6e0d588
+      path: packages/ubuntu_wizard

@@ -12,8 +12,8 @@ dependencies:
   flutter_html: 3.0.0-alpha.6
   ubuntu_desktop_installer:
     git:
+      # specify ref in pubspec_overrides.yaml
       url: https://github.com/canonical/ubuntu-desktop-installer
-      ref: 05e3654441e5616bc8c1e1f67abd39aa80a02e4b
       path: packages/ubuntu_desktop_installer
   url_launcher: ^6.1.8
   yaru: ^0.5.0
