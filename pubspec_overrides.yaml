@@ -4,10 +4,10 @@ dependency_overrides:
   ubuntu_desktop_installer:
     git:
       url: https://github.com/canonical/ubuntu-desktop-installer
-      ref: 3cb02d67b64352f1e5f38ffd9685cdac75a53d14
+      ref: 5f588de65fc80891900cd1c640b0df57dfde3287
       path: packages/ubuntu_desktop_installer
   ubuntu_wizard:
     git:
       url: https://github.com/canonical/ubuntu-desktop-installer
-      ref: 3cb02d67b64352f1e5f38ffd9685cdac75a53d14
+      ref: 5f588de65fc80891900cd1c640b0df57dfde3287
       path: packages/ubuntu_wizard
