@@ -55,3 +55,12 @@ jobs:
     - run: flutter pub global activate melos
     - run: melos bootstrap
     - run: melos format
+
+  subiquity:
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+    - name: Check subiquity integration
+      run: ./scripts/subiquity_integration
