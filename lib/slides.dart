@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:ubuntu_desktop_installer/installer.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import 'l10n.dart';
@@ -8,9 +7,14 @@ import 'l10n.dart';
 const headerStyle = TextStyle(color: Colors.white, fontSize: 32);
 const bodyStyle = TextStyle(color: Colors.white, fontSize: 18);
 
-final firstSlide = Slide(
-  title: (context) => Text(context.l10n.firstSlideTitle),
-  body: (context) => Stack(
+final installationSlides = [
+  _buildFirstSlide,
+  _buildSecondSlide,
+  _buildThirdSlide,
+];
+
+Widget _buildFirstSlide(BuildContext context) {
+  return Stack(
     children: [
       Image.asset('assets/installation_slides/welcome.png'),
       Padding(
@@ -30,12 +34,11 @@ final firstSlide = Slide(
         ),
       ),
     ],
-  ),
-);
+  );
+}
 
-final secondSlide = Slide(
-  title: (context) => Text(context.l10n.secondSlideTitle),
-  body: (context) => Stack(
+Widget _buildSecondSlide(BuildContext context) {
+  return Stack(
     children: [
       Image.asset('assets/installation_slides/background.png'),
       Padding(
@@ -70,12 +73,11 @@ final secondSlide = Slide(
         ),
       ),
     ],
-  ),
-);
+  );
+}
 
-final thirdSlide = Slide(
-  title: (context) => Text(context.l10n.thirdSlideTitle),
-  body: (context) => Stack(
+Widget _buildThirdSlide(BuildContext context) {
+  return Stack(
     children: [
       Image.asset('assets/installation_slides/background.png'),
       Center(
@@ -88,9 +90,9 @@ final thirdSlide = Slide(
               fontSize: FontSize(24),
             ),
           },
-          onAnchorTap: (url, _, __, ___) => launchUrlString(url!),
+          onAnchorTap: (url, _, __) => launchUrlString(url!),
         ),
       ),
     ],
-  ),
-);
+  );
+}
