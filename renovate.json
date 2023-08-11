@@ -2,13 +2,5 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "github>canonical/ubuntu-flutter-plugins"
-  ],
-  "enabledManagers": [
-    "git-submodules",
-    "github-actions",
-    "pub"
-  ],
-  "git-submodules": {
-    "enabled": true
-  }
+  ]
 }
