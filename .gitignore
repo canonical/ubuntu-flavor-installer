@@ -29,6 +29,7 @@
 .packages
 .pub-cache/
 pubspec.lock
+pubspec_overrides.yaml
 .pub/
 /build/
 /doc/
