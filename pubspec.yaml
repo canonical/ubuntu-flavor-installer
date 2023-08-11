@@ -32,10 +32,5 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
-    - assets/choose_your_look/
-    - assets/install_alongside/
-    - assets/installation_complete/
-    - assets/installation_slides/
-    - assets/select_guided_storage/
-    - assets/try_or_install/
-    - assets/welcome/
+    - assets/slides/
+    - assets/theme/
