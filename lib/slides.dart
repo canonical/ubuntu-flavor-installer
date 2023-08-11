@@ -16,7 +16,7 @@ final installationSlides = [
 Widget _buildFirstSlide(BuildContext context) {
   return Stack(
     children: [
-      Image.asset('assets/installation_slides/welcome.png'),
+      Image.asset('assets/slides/welcome.png'),
       Padding(
         padding: const EdgeInsets.all(40),
         child: FractionallySizedBox(
@@ -40,7 +40,7 @@ Widget _buildFirstSlide(BuildContext context) {
 Widget _buildSecondSlide(BuildContext context) {
   return Stack(
     children: [
-      Image.asset('assets/installation_slides/background.png'),
+      Image.asset('assets/slides/background.png'),
       Padding(
         padding: const EdgeInsets.all(60),
         child: Row(
@@ -79,7 +79,7 @@ Widget _buildSecondSlide(BuildContext context) {
 Widget _buildThirdSlide(BuildContext context) {
   return Stack(
     children: [
-      Image.asset('assets/installation_slides/background.png'),
+      Image.asset('assets/slides/background.png'),
       Center(
         child: Html(
           shrinkWrap: true,
