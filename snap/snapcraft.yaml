@@ -196,6 +196,7 @@ parts:
       - shared-mime-info
       - libglib2.0-bin
       - libibus-1.0-5
+      - gnome-session-canberra
     prime:
       - usr/lib/*/libEGL*.so.*
       - usr/lib/*/libGL*.so.*
@@ -228,6 +229,7 @@ parts:
       - usr/lib/*/
       - usr/bin/update-mime-database
       - usr/bin/g*
+      - usr/bin/canberra-gtk-play
       - usr/share/mime
       - -usr/lib/*/pkgconfig
       - -usr/lib/pkgconfig
