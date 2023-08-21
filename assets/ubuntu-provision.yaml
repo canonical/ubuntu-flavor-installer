@@ -1,0 +1,7 @@
+bootstrap:
+  pages:
+    - locale
+    - keyboard
+    - source
+    - storage
+    - identity
