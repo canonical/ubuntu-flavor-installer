@@ -4,4 +4,6 @@ bootstrap:
     - keyboard
     - source
     - storage
+    - network
+    - timezone
     - identity
