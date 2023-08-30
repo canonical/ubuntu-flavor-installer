@@ -62,3 +62,10 @@ Images such as logos and theme previews can be customized by overriding assets u
 The full set of image assets is visible at:
 - [ubuntu-desktop-provision/ubuntu_provision/assets](https://github.com/canonical/ubuntu-desktop-provision/tree/main/packages/ubuntu_provision/assets)
 - [ubuntu-desktop-provision/ubuntu_bootstrap/assets](https://github.com/canonical/ubuntu-desktop-provision/tree/main/packages/ubuntu_bootstrap/assets)
+
+## Some key files you'll need to update for your flavour
+
+```
+assets/ubuntu-provision.yaml # Define list of installer pages to display
+snap/snapcraft.yaml # Change the snap name, but leave the parts and binary names
+```

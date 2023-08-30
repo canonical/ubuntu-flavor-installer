@@ -1,3 +1,4 @@
+# Reasonable list of default pages to show, replace this list as needed.
 bootstrap:
   pages:
     - locale
