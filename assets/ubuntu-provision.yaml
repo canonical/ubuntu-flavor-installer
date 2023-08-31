@@ -1,0 +1,10 @@
+# Reasonable list of default pages to show, replace this list as needed.
+bootstrap:
+  pages:
+    - locale
+    - keyboard
+    - source
+    - storage
+    - network
+    - timezone
+    - identity
