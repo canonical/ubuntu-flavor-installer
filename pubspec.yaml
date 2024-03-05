@@ -19,7 +19,7 @@ dependencies:
   ubuntu_utils:
     path: vendor/ubuntu-desktop-provision/packages/ubuntu_utils
   url_launcher: ^6.1.8
-  yaru: ^0.9.0
+  yaru: ^4.0.0
 
 dev_dependencies:
   flutter_lints: ^2.0.0
